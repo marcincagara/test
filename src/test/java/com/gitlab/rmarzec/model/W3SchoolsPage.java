@@ -10,7 +10,7 @@ public class W3SchoolsPage extends BasePage{
 
     private final String expectedUrl = "https://www.w3schools.com/tags/tag_select.asp";
     private final By acceptCookies = By.id("accept-choices");
-    private final By tryIt = By.cssSelector("a.w3-btn[href*='tryit.asp']");
+    private final By tryIt = By.xpath("//*[contains(text(),'Try it Yourself')]");
     private final By iframe = By.id("iframeResult");
     private final By header = By.tagName("h1");
     private final By selectTag = By.tagName("select");
