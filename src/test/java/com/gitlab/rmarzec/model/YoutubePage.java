@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class YoutubePage extends BasePage {
@@ -15,6 +16,9 @@ public class YoutubePage extends BasePage {
     private final By logoButton = By.id("logo");
     private final By search = By.xpath("//*[@role='combobox']");
     private final By channels = By.tagName("ytd-video-renderer");
+    private final By channelName = By.id("text-container");
+    private final By videoTitle= By.id("video-title");
+    private final By filmDuration = By.cssSelector("span.ytd-thumbnail-overlay-time-status-renderer");
 
     public YoutubePage(WebDriver drive) {
         super(drive);
@@ -48,5 +52,24 @@ public class YoutubePage extends BasePage {
     public List<WebElement> getChannels(int size) {
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(channels, size));
         return driver.findElements(channels).stream().limit(size).toList();
+    }
+
+    public List<YTTile> fillYtList() {
+        List<YTTile> ytTileList = new ArrayList<YTTile>();
+        List<WebElement> getVideos = getChannels(12);
+        for (WebElement webElement : getVideos) {
+            YTTile yTTile = new YTTile();
+            yTTile.setChannel(webElement.findElement(channelName).getAttribute("innerText").trim());
+            yTTile.setTitle(webElement.findElement(videoTitle).getText());
+            String duration = "live";
+            try {
+                duration = webElement.findElement(filmDuration).getAttribute("innerText").trim();
+                yTTile.setLength(duration);
+            } catch (Exception e) {
+                yTTile.setLength(duration);
+            }
+            ytTileList.add(yTTile);
+        }
+        return ytTileList;
     }
 }
