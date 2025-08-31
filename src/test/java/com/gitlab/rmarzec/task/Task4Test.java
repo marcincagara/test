@@ -26,30 +26,13 @@ public class Task4Test {
         System.out.println(youtubePage.getShortChannelName());
         youtubePage.clickLogoButton();
         youtubePage.searchFor("Live");
-        List<WebElement> getVideos = youtubePage.getChannels(12);
         //Lista kafelkow
         List<YTTile> ytTileList = new ArrayList<YTTile>();
 
-        fillYtList(getVideos, ytTileList);
+        ytTileList = youtubePage.fillYtList(12);
         ytTileList.stream().filter(it -> !it.getLength().equals("live")).forEach(yTTile -> {
             System.out.println("title " + yTTile.getTitle() + "length " + yTTile.getLength());
         });
-    }
-
-    private static void fillYtList(List<WebElement> getVideos, List<YTTile> ytTileList) {
-        for (WebElement webElement : getVideos) {
-            YTTile yTTile = new YTTile();
-            yTTile.setChannel(webElement.findElement(By.id("text-container")).getAttribute("innerText").trim());
-            yTTile.setTitle(webElement.findElement(By.id("video-title")).getText());
-            String duration = "live";
-            try {
-                duration = webElement.findElement(By.cssSelector("span.ytd-thumbnail-overlay-time-status-renderer")).getAttribute("innerText").trim();
-                yTTile.setLength(duration);
-            } catch (Exception e) {
-                yTTile.setLength("live");
-            }
-            ytTileList.add(yTTile);
-        }
     }
 
     @AfterTest
